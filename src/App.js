@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+class App extends React.Component {
+  state = {
+    task: '',
+    allTasks: []
+  };
+
+  setTask = (event) => {
+    this.setState({
+      task: event.target.value
+    });
+  };
+
+  addTask = () => {
+    this.setState({
+      allTasks: [...this.state.allTasks, this.state.task]
+    });
+  };
+  
+  removeTask(item) {
+    const newTaskItems = this.state.allTasks.filter(allTasks => {
+      return allTasks !== item;
+    });
+    this.setState({
+      allTasks: [...newTaskItems]
+    })
+  };
+
+  resetInput = () => {
+    this.setState({
+      task: ''
+  })
+  };
+
+  render () {
+    const items = this.state.allTasks.map((item, index) => {
+      return (
+        <p key={index}>
+          {item}
+          <button className="removeBtn" onClick={(e)=> this.removeTask(item)}>X</button>
+          
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+      );
+    });
+  
+      return (
+        <div className= "main">
+          <div className= "container">
+            <h1>Lauren's To - Do List</h1> <br/>
+            <input className="inputBox" onChange={event => this.setTask(event)} type="text" placeholder="Add Task" />
+            <button className="addBtn" onClick={this.addTask} onReset={this.resetInput}>Add Task</button>
+            {items}
+          </div>
+        </div>
+      );
+    }
+  }
+  export default App;
